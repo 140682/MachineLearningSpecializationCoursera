@@ -1,15 +1,15 @@
 import scrapy
 
 # to run:
-# scrapy crawl comments -o comments.json
-class CommentsSpider(scrapy.Spider):
-    name = "comments"
+# scrapy crawl reviews -o reviews.json
+class ReviewsSpider(scrapy.Spider):
+    name = "reviews"
     
     start_urls = ['https://market.yandex.ru/catalog/54726/list?how=opinions&deliveryincluded=0&onstock=1']    
     
     def __init__(self):
         self.count = 0
-        self.LIMIT = 15
+        self.LIMIT = 5
     
     def parse(self, response):
         # follow links to phone pages
@@ -26,11 +26,18 @@ class CommentsSpider(scrapy.Spider):
             yield scrapy.Request(next_page, callback=self.parse)
 
     def parse_phone(self, response):
-        for review in response.css('div.product-review-item'):            
-            
+        for review in response.css('div.product-review-item'):                        
+            pos = ' '.join(review.css('.product-review-item__stat:nth-child(4) .product-review-item__text::text').extract())                                       
+            neg = ' '.join(review.css('.product-review-item__stat:nth-child(5) .product-review-item__text::text').extract())
+            if len(pos) > len(neg):
+                text = pos
+                rating = 5
+            else:
+                text = neg
+                rating = 1
             yield {
-                'text': ' '.join(review.css('.product-review-item__stat:nth-child(6) .product-review-item__text::text').extract()),       
-                'rating': review.css('div.rating::text').extract_first(),              
+                'text': text,       
+                'rating': rating,              
             }
             
         # follow link to the next review page
