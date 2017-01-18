@@ -21,7 +21,9 @@ class SentimentClassifier(object):
             return -1
         
 
-    def get_prediction_message(self, text):
-        prediction = self.predict_text(text)     
-        print prediction
+    def get_prediction_message(self, prediction):        
         return self.classes_dict[str(prediction)]
+    
+    def get_prediction(self, text):
+        prediction = self.predict_text(text)             
+        return prediction

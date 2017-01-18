@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Анализ тональности отзывов на телефоны: демонстрация работы</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Анализ тональности отзывов на телефоны: демонстрация работы</h2>
+            <p>Модель обучена на выборке из 11665 отзывов с Яндекс.Маркета с помощью CountVectorizer, TfidfTransformer и SGDClassifier</p>
+            <form action="{{ url_for('index_page') }}" method=post>
+                <div class="form-group">
+                    <label for="comment">Введите отзыв на телефон:</label>
+                    <textarea class="form-control" rows="15" cols="100" id="comment" name="text">{{ text }}</textarea>
+                    <br>
+                    <button type="submit" class="btn btn-default">Оценить</button>                    
+                </div>
+            </form>
+            <label for="comment">Тональность отзыва:</label>                 
+            <h4><span class="label label-success">{{ prediction_message_pos }}</span></h4>           
+            <h4><span class="label label-danger">{{ prediction_message_neg }}</span></h4>           
+        </div>       
+    </body>
+</html>

@@ -12,20 +12,20 @@ print "Classifier is ready"
 print time.time() - start_time, "seconds"
 
 @app.route("/sentiment-demo", methods=["POST", "GET"])
-def index_page(text="", prediction_message=""):
+def index_page(text="", prediction_message_pos="", prediction_message_neg=""):    
     if request.method == "POST":
         text = request.form["text"]
-        logfile = open("ydf_demo_logs.txt", "a", "utf-8")
-        print text
-        print >> logfile, "<response>"
+        logfile = open("ydf_demo_logs.txt", "a", "utf-8")        
         print >> logfile, text
-        prediction_message = classifier.get_prediction_message([text])
-        print prediction_message
-        print >> logfile, prediction_message
-        print >> logfile, "</response>"
+        prediction = classifier.get_prediction([text])
+        prediction_message = classifier.get_prediction_message(prediction)    
+        if prediction == 1:
+            prediction_message_pos = prediction_message
+        else:
+            prediction_message_neg = prediction_message
+        print >> logfile, prediction_message    
         logfile.close()
-
-    return render_template('sentiment_demo.html', text=text, prediction_message=prediction_message)
+    return render_template('sentiment_demo2.html', text=text, prediction_message_pos=prediction_message_pos, prediction_message_neg=prediction_message_neg)    
 
 
 if __name__ == "__main__":
